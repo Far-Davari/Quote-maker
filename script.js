@@ -4,13 +4,36 @@ const quoteText = document.getElementById("quote");
 const authorText = document.getElementById("author");
 const twitterBtn = document.getElementById("twitter");
 const newQuoteBtn = document.getElementById("new-quote");
+const loader = document.getElementById("loader");
 
 let apiQuotes = [];
 
+// Show Loading
+// function loading() {
+//   loader.hidden = false;
+//   quoteContainer.hidden = true;
+// }
+function loading() {
+  loader.style.display = "grid";
+  quoteContainer.style.display = "none";
+}
+
+// Hide Loading
+// function complete() {
+//   quoteContainer.hidden = false;
+//   loader.hidden = true;
+// }
+function complete() {
+  quoteContainer.style.display = "block";
+  loader.style.display = "none";
+}
+
+
 // Show New Quote
 function newQuote() {
+  loading();
   // Pick a random quote from apiQuotes array
-  const quote = apiQuotes[0];;
+  const quote = apiQuotes[0];
   // Check if Author field is blank and replace it with 'Unkown'
   if (!quote.author) {
     authorText.textContent = "Unkown";
@@ -18,17 +41,19 @@ function newQuote() {
     authorText.textContent = quote.author;
   }
   // Check Quote length to determine styilng
-  if (quote.quote.quote > 120) {
+  if (quote.quote.length > 120) {
     quoteText.classList.add("long-quote");
   } else {
     quoteText.classList.remove("long-quote");
   }
-
+  // Set Quote, Hide Loader
   quoteText.textContent = quote.quote;
+  complete();
 }
 
 // Get Quotes From API
 async function getquotes() {
+  loading();
   const apiUrl = "https://api.api-ninjas.com/v1/quotes";
   try {
     const response = await fetch(apiUrl, {
@@ -51,7 +76,7 @@ function tweetQuote() {
 
 // Event Listeners
 newQuoteBtn.addEventListener("click", getquotes);
-twitterBtn.addEventListener("click", tweetQuote)
+twitterBtn.addEventListener("click", tweetQuote);
 
 // On Load
 getquotes();
@@ -64,4 +89,3 @@ function newQuoteLocal() {
 }
 newQuoteLocal();
 */
-
