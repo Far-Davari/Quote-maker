@@ -8,30 +8,19 @@ const loader = document.getElementById("loader");
 
 let apiQuotes = [];
 
-// Show Loading
-// function loading() {
-//   loader.hidden = false;
-//   quoteContainer.hidden = true;
-// }
-function loading() {
+function showLoadingSpinner() {
   loader.style.display = "grid";
   quoteContainer.style.display = "none";
 }
 
-// Hide Loading
-// function complete() {
-//   quoteContainer.hidden = false;
-//   loader.hidden = true;
-// }
-function complete() {
+function hideLoadingSpinner() {
   quoteContainer.style.display = "block";
   loader.style.display = "none";
 }
 
-
 // Show New Quote
 function newQuote() {
-  loading();
+  showLoadingSpinner();
   // Pick a random quote from apiQuotes array
   const quote = apiQuotes[0];
   // Check if Author field is blank and replace it with 'Unkown'
@@ -48,12 +37,12 @@ function newQuote() {
   }
   // Set Quote, Hide Loader
   quoteText.textContent = quote.quote;
-  complete();
+  hideLoadingSpinner();
 }
 
 // Get Quotes From API
-async function getquotes() {
-  loading();
+async function getQuote() {
+  showLoadingSpinner();
   const apiUrl = "https://api.api-ninjas.com/v1/quotes";
   try {
     const response = await fetch(apiUrl, {
@@ -64,7 +53,8 @@ async function getquotes() {
     apiQuotes = await response.json();
     newQuote();
   } catch (error) {
-    console.error("Error:", error);
+    newQuote();
+    console.error(error);
   }
 }
 
@@ -75,17 +65,17 @@ function tweetQuote() {
 }
 
 // Event Listeners
-newQuoteBtn.addEventListener("click", getquotes);
+newQuoteBtn.addEventListener("click", getQuote);
 twitterBtn.addEventListener("click", tweetQuote);
 
 // On Load
-getquotes();
+getQuote();
 
 // If We Had Local Quotes
 /*
 function newQuoteLocal() {
   const quote = localQuote[Math.floor(Math.random() * localQuote.length)];
   console.log(quote);
-}
+} 
 newQuoteLocal();
 */
